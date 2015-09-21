@@ -1,6 +1,6 @@
 Systran Geographic Ruby Client Library.
 ===================
-
+This is a Ruby implementation of the Systran Geographic Client Library. This client is a standard gem.
 
 Build
 -------------
