@@ -54,8 +54,6 @@ module GeographicApiClient
           # Get API key (with prefix if set).
           # @param [String] param_name the parameter name of API key auth
           def get_key_with_prefix(param_name)
-            puts 'Swagger.configuration.inspect'
-            puts Swagger.configuration.inspect
             Swagger.configuration.key
           end
 
