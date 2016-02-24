@@ -10,10 +10,10 @@ describe "GeographicApiClient" do
         if key.length > 0
           configuration.key = key
         else
-          puts "The key.txt file is empty"
+          raise "The key.txt file is empty"
         end
       else
-        puts"The key.txt file doesn't exists"
+        raise "The key.txt file doesn't exists"
       end
 
     end
@@ -24,36 +24,70 @@ describe "GeographicApiClient" do
       expect(GeographicApiClient::Swagger.configuration.key.length).to be_between(10, 100)
     end
   end
-
   describe "GeographicApi" do
-    it "Gets Point of interests." do
-      result = GeographicApiClient::PoiApi.geographic_poi_get
-      expect(result.points_of_interest).not_to be_empty
+    it "Gets the API version." do
+      result = GeographicApiClient::APIVersionApi.geographic_api_version_get
+      expect(result.version).not_to be_empty
     end
-    it "Gets Point of interests." do
-      result = GeographicApiClient::PoiApi.geographic_poi_supported_languages_get
+
+    it "Gets the supported languages" do
+      result = GeographicApiClient::SupportedLanguagesApi.geographic_supported_languages_get
       expect(result.languages).not_to be_empty
+
     end
-    it "Gets Point of interests." do
-      result = GeographicApiClient::PoiApi.geographic_poi_events_get
-      expect(result.events).not_to be_nil
+    it "Gets the list of destinations" do
+      result = GeographicApiClient::DestinationsApi.geographic_destinations_list_get
+      expect(result.total).to be_an(Integer)
     end
-    it "Gets Point of interests." do
-      request = GeographicApiClient::PoiApi.geographic_poi_get
-      result = GeographicApiClient::PoiApi.geographic_poi_details_get(request.points_of_interest[0].id)
-      expect(result.poi_details).not_to be_nil
+    it "Gets a destination" do
+      id = GeographicApiClient::DestinationsApi.geographic_destinations_list_get.destinations[0].id
+      puts id.inspect
+      result = GeographicApiClient::DestinationsApi.geographic_destinations_get_get(id)
+      expect(result).not_to be_nil
     end
-    it "Gets Point of interests." do
-      result = GeographicApiClient::PoiApi.geographic_poi_types_get
+
+    it "Gets the list of dossiers" do
+      result = GeographicApiClient::InspirationsApi.geographic_inspirations_dossiers_list_get
+      expect(result.total).to be_an(Integer)
+    end
+    it "Gets the list of events" do
+      result = GeographicApiClient::InspirationsApi.geographic_inspirations_events_list_get
+      expect(result.total).to be_an(Integer)
+    end
+    it "Gets the list of news" do
+      result = GeographicApiClient::InspirationsApi.geographic_inspirations_news_in_brief_list_get
+      expect(result.total).to be_an(Integer)
+    end
+    it "Gets the list of slideshows" do
+      result = GeographicApiClient::InspirationsApi.geographic_inspirations_slide_shows_list_get
+      expect(result.total).to be_an(Integer)
+    end
+    it "Gets the list of tests" do
+      result = GeographicApiClient::InspirationsApi.geographic_inspirations_tests_list_get
+      expect(result.total).to be_an(Integer)
+    end
+    it "Gets the list of inspirations" do
+      result = GeographicApiClient::InspirationsApi.geographic_inspirations_list_get
+      expect(result.total).to be_an(Integer)
+    end
+    it "Gets an inspiration" do
+      id =  GeographicApiClient::InspirationsApi.geographic_inspirations_list_get.inspirations[0].id
+      result = GeographicApiClient::InspirationsApi.geographic_inspirations_get_get(id)
+      expect(result).not_to be_nil
+    end
+
+    it "Gets the types of POI" do
+      result = GeographicApiClient::POIApi.geographic_poi_types_get
       expect(result.poi_types).not_to be_empty
     end
-  end
-
-  describe "InspirationsApi" do
-    it "Gets Inspirations." do
-      result = GeographicApiClient::InspirationsApi.geographic_inspirations_get
-      expect(result.total).not_to be_nil
+    it "Gets the list of POI" do
+      result = GeographicApiClient::POIApi.geographic_poi_list_get
+      expect(result.total).to be_an(Integer)
+    end
+    it "Gets a POI" do
+      id =  GeographicApiClient::POIApi.geographic_poi_list_get.points_of_interest[0].id
+      result = GeographicApiClient::POIApi.geographic_poi_get_get(id)
+      expect(result).not_to be_nil
     end
   end
-
 end
